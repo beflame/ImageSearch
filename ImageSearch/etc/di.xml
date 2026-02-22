@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Preferences -->
+    <preference for="Vendor\ImageSearch\Api\SearchServiceInterface" type="Vendor\ImageSearch\Model\SearchService" />
+
+    <!-- Queue Publisher -->
+    <type name="Vendor\ImageSearch\Queue\Publisher">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\Framework\MessageQueue\PublisherInterface</argument>
+        </arguments>
+    </type>
+
+    <!-- Queue Consumer -->
+    <type name="Vendor\ImageSearch\Queue\IndexImageConsumer">
+        <arguments>
+            <argument name="searchService" xsi:type="object">Vendor\ImageSearch\Api\SearchServiceInterface</argument>
+        </arguments>
+    </type>
+
+    <!-- Plugin to override search results collection -->
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <plugin name="image_search_override_collection" type="Vendor\ImageSearch\Plugin\ProductCollectionPlugin" />
+    </type>
+
+    <!-- Observer for product save -->
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="save" xsi:type="array">
+                        <item name="imageSearchProductProcessor" xsi:type="string">Vendor\ImageSearch\Observer\ProductImageSave</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Add this to the existing type configuration -->
+    <type name="Vendor\ImageSearch\Observer\ProductImageSave">
+        <arguments>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface</argument>
+        </arguments>
+    </type>
+
+    <!-- Index -->
+	<type name="Magento\Framework\Console\CommandList">
+    	<arguments>
+        	<argument name="commands" xsi:type="array">
+            	<item name="imagesearch_index" xsi:type="object">Vendor\ImageSearch\Console\Command\IndexImages</item>
+        	</argument>
+    	</arguments>
+	</type>
+	
+</config>

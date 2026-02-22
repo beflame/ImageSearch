@@ -1,0 +1,60 @@
+<?php
+/** @var \Vendor\ImageSearch\Block\Uploader $block */
+?>
+
+<!-- Основной контейнер загрузчика (без заголовка, так как он будет в попапе) -->
+<div class="imagesearch-uploader-popup">
+    <div class="uploader-container">
+        <!-- Drag & Drop зона -->
+        <div class="drop-zone" id="drop-zone">
+            <div class="drop-zone-content">
+                <span class="icon">📷</span>
+                <p><?= $block->escapeHtml(__('Drag & drop an image here')) ?></p>
+                <p><?= $block->escapeHtml(__('or')) ?></p>
+                <button type="button" id="upload-button" class="action primary">
+                    <?= $block->escapeHtml(__('Choose File')) ?>
+                </button>
+                <p class="note"><?= $block->escapeHtml(__('Supported formats: JPG, PNG, GIF (max 20MB)')) ?></p>
+            </div>
+            
+            <!-- Превью изображения -->
+            <div class="preview-container" id="image-preview" style="display: none;">
+                <!-- Превью будет вставлено через JS -->
+            </div>
+            
+            <!-- Прогресс загрузки -->
+            <div class="progress-container" style="display: none;">
+                <div class="progress-bar" id="upload-progress-bar" role="progressbar" style="width: 0%;">0%</div>
+            </div>
+        </div>
+
+        <!-- Форма загрузки -->
+        <form id="image-upload-form" 
+              method="post" 
+              enctype="multipart/form-data" 
+              action="<?= $block->escapeUrl($block->getUploadUrl()) ?>">
+            <?= $block->getBlockHtml('formkey') ?>
+            <input type="file" 
+                   name="image" 
+                   accept="image/jpeg,image/png,image/gif" 
+                   style="display: none;" />
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript инициализация загрузчика -->
+<script type="text/x-magento-init">
+{
+    "#image-upload-form": {
+        "Vendor_ImageSearch/js/image-upload": {
+            "uploadUrl": "<?= $block->escapeUrl($block->getUploadUrl()) ?>",
+            "maxFileSize": <?= (int)$block->getMaxFileSize() ?>,
+            "allowedExtensions": <?= json_encode($block->getAllowedExtensions()) ?>,
+            "progressBar": "#upload-progress-bar",
+            "previewContainer": "#image-preview",
+            "uploadButton": "#upload-button",
+            "dropZone": "#drop-zone"
+        }
+    }
+}
+</script>

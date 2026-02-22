@@ -1,0 +1,28 @@
+<?php
+/** @var \Vendor\ImageSearch\Block\Chips $block */
+$chips = $block->getChips();
+?>
+
+<?php if (!empty($chips)): ?>
+<div class="imagesearch-chips-container">
+    <div class="imagesearch-chips-title"><?= $block->escapeHtml(__('Refine your search:')) ?></div>
+    <div class="imagesearch-chips-list">
+        <?php foreach ($chips as $chip): ?>
+            <a class="imagesearch-chip" href="<?= $block->escapeUrl($block->getChipUrl($chip['id'])) ?>">
+                <?= $block->escapeHtml($chip['label']) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if ($block->isEnabled()): ?>
+<div class="imagesearch-upload-container">
+    <form action="<?= $block->escapeUrl($block->getUploadUrl()) ?>" method="post" enctype="multipart/form-data">
+        <?= $block->getBlockHtml('formkey') ?>
+        <label for="imagesearch-image"><?= $block->escapeHtml(__('Search by image:')) ?></label>
+        <input type="file" id="imagesearch-image" name="image" accept="image/*" required>
+        <button type="submit"><?= $block->escapeHtml(__('Search')) ?></button>
+    </form>
+</div>
+<?php endif; ?>

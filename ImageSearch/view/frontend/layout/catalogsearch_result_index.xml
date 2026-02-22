@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Vendor_ImageSearch::css/styles.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Vendor\ImageSearch\Block\Chips" name="imagesearch.chips" template="Vendor_ImageSearch::chips.phtml" before="search.result"/>
+            <block class="Vendor\ImageSearch\Block\Uploader" name="imagesearch.uploader" template="Vendor_ImageSearch::uploader.phtml" before="imagesearch.chips"/>
+        </referenceContainer>
+        <referenceBlock name="search.result">
+            <arguments>
+                <argument name="image_search_uploader" xsi:type="array">
+                    <item name="name" xsi:type="string">image_search_uploader</item>
+                    <item name="class" xsi:type="string">Vendor\ImageSearch\Block\Uploader</item>
+                    <item name="template" xsi:type="string">Vendor_ImageSearch::uploader.phtml</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

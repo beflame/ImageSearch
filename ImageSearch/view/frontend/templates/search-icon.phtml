@@ -1,0 +1,24 @@
+<?php
+/** @var \Vendor\ImageSearch\Block\Uploader $block */
+?>
+<div class="image-search-icon-wrapper">
+    <div class="image-search-icon" id="image-search-trigger-header" title="<?= $block->escapeHtmlAttr(__('Search by Image')) ?>">
+        <span class="icon-camera">📷</span>
+    </div>
+</div>
+
+<!-- Pop-up контейнер для загрузчика изображений (скрыт по умолчанию) -->
+<div id="image-search-popup-header" style="display: none;">
+    <?= $block->getLayout()->createBlock('Vendor\ImageSearch\Block\Uploader')->setTemplate('Vendor_ImageSearch::uploader.phtml')->toHtml(); ?>
+</div>
+
+<script type="text/x-magento-init">
+{
+    "#image-search-popup-header": {
+        "Vendor_ImageSearch/js/popup": {
+            "triggerSelector": "#image-search-trigger-header",
+            "popupTitle": "<?= $block->escapeHtml(__('Search by Image')) ?>"
+        }
+    }
+}
+</script>
